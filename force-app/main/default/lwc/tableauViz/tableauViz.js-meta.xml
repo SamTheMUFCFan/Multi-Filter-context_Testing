@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
-    <apiVersion>48.0</apiVersion>
+    <apiVersion>57.0</apiVersion>
     <isExposed>true</isExposed>
-    <masterLabel>Tableau Visualization</masterLabel>
+    <masterLabel>Tableau Visualization Multi-Filtering</masterLabel>
     <targets>
         <target>lightning__AppPage</target>
         <target>lightning__RecordPage</target>
         <target>lightning__HomePage</target>
         <target>lightningCommunity__Page</target>
         <target>lightningCommunity__Default</target>
+        <target>analytics__Dashboard</target>
     </targets>
     <targetConfigs>
     <targetConfig targets="lightning__RecordPage">
@@ -64,7 +65,7 @@
             </supportedFormFactors>
         </targetConfig>
         <targetConfig
-            targets="lightning__AppPage,lightning__HomePage,lightningCommunity__Default"
+            targets="lightning__AppPage,lightning__HomePage,lightningCommunity__Default, analytics__Dashboard"
         >
             <property
                 name="vizUrl"
@@ -92,6 +93,30 @@
                 default="550"
                 label="Height"
                 required="true"
+            />
+            <property
+            name="tabAdvancedFilter"
+            type="String"
+            label="Additional Filter: Tableau field name"
+            description="Enter the name of the Tableau field you want to filter on. The field needs to be in the Tableau view you are embedding."
+            />
+            <property
+            name="sfAdvancedFilter"
+            type="String"
+            datasource="apex://ObjectFieldPickList"
+            label="Additional Filter: Salesforce object field"
+            />
+            <property
+            name="tabAdvancedFilter2"
+            type="String"
+            label="Additional Filter: Tableau field name"
+            description="Enter the name of the Tableau field you want to filter on. The field needs to be in the Tableau view you are embedding."
+            />
+            <property
+            name="sfAdvancedFilter2"
+            type="String"
+            datasource="apex://ObjectFieldPickList"
+            label="Additional Filter: Salesforce object field"
             />
         </targetConfig>
     </targetConfigs>

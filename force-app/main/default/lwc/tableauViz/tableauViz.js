@@ -7,6 +7,10 @@ import { reduceErrors } from './errorUtils.js';
 import templateMain from './tableauViz.html';
 import templateError from './tableauVizError.html';
 
+//per meeting with Nathan
+const ACC_FIELDS = [
+    'Account.Name'
+];
 export default class TableauViz extends LightningElement {
     //#region Member Variables
     //#region Special LWC variable
@@ -27,6 +31,10 @@ export default class TableauViz extends LightningElement {
     // Adding another filter involves two properties here, two api getter/setter properties, and an additional line in validateInputs
     _sfAdvancedFilter;
     _tabAdvancedFilter;
+    //adding second group of filters
+    _sfAdvancedFilter2;
+    _tabAdvancedFilter2;
+
     //#endregion Filter variables
 
     // Used in the error html page
@@ -35,6 +43,14 @@ export default class TableauViz extends LightningElement {
     _viz;
     _isLibLoaded = false;
     //#endregion Member Variables
+
+    //per Meeting with Nathan
+    @wire(getRecord, { recordId: '$recordId', fields: ACC_FIELDS })
+    account;
+
+    get name() {
+        return this.account?.data?.fields?.Name?.value;
+    }
 
     @wire(getRecord, {
         recordId: '$recordId',
@@ -174,6 +190,38 @@ export default class TableauViz extends LightningElement {
             );
         }
     }
+    //second set of filters
+    @api
+    get tabAdvancedFilter2() {
+        return this._tabAdvancedFilter2;
+    }
+
+    set tabAdvancedFilter2(val) {
+        this._tabAdvancedFilter2 = val;
+        if (this.sfAdvancedFilter2) {
+            this.addRecordFilter(
+                this.sfAdvancedFilter2,
+                this._tabAdvancedFilter2
+            );
+        }
+    }
+
+    @api
+    get sfAdvancedFilter2() {
+        return this._sfAdvancedFilter2;
+    }
+
+    set sfAdvancedFilter2(val) {
+        this._sfAdvancedFilter2 = val;
+        if (this.tabAdvancedFilter2) {
+            this.addRecordFilter(
+                this._sfAdvancedFilter2,
+                this.tabAdvancedFilter2
+            );
+        }
+    }
+
+
     //#endregion
 
     //#region Filter handling
@@ -283,7 +331,16 @@ export default class TableauViz extends LightningElement {
                 'Advanced filtering requires that you select both Tableau and Salesforce fields. The fields should represent corresponding data, for example, user or account identifiers.';
             return false;
         }
-
+        if (
+            !this._validateRecordFilterValuesSet(
+                this.sfAdvancedFilter2,
+                this.tabAdvancedFilter2
+            )
+        ) {
+            this.errorMessage =
+                'Advanced filtering requires that you select both Tableau and Salesforce fields. The fields should represent corresponding data, for example, user or account identifiers.';
+            return false;
+        }
         return true;
     }
     //#endregion Validaton methods
